@@ -22,6 +22,12 @@ builds:
       - go_first_class
     flags:
       - -trimpath
+    ldflags: |
+      -s -w
+      -X github.com/prometheus/common/version.Version={{.Version}}
+      -X github.com/prometheus/common/version.Revision={{.FullCommit}}
+      -X github.com/prometheus/common/version.Branch={{.Branch}}
+      -X github.com/prometheus/common/version.BuildDate={{.Date}}
 
 nfpms:
   - description: Prometheus backup
