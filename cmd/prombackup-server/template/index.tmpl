@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Prometheus backup</title>
+<style>
+caption {
+  caption-side: top;
+}
+
+table {
+  text-align: left;
+}
+
+#downloads {
+  min-width: 20em;
+}
+</style>
+</head>
+<body>
+  <h1>Prometheus backup</h1>
+
+  <p><a href="/metrics">Metrics</a></p>
+
+  <h2>Take and download snapshot</h2>
+
+  <form method="post" action="./api/snapshot">
+    <fieldset>
+      <p>Archive format:
+        {{range $index, $elem := .ArchiveFormats}}
+          <label><input name="download_format" type="radio" value="{{ .Name }}"
+            {{ if eq $index 0 }}checked{{end}}>
+            {{ .FileExtension }}
+          </label>
+        {{end}}
+      </p>
+      <p><label><input type="checkbox" value="1" name="skip_head">Skip head block</label></p>
+      <p><input type="submit" value="Download snapshot"></p>
+    </fieldset>
+  </form>
+
+  <h2>Prune snapshots</h2>
+
+  <form method="post" action="./api/prune">
+    <fieldset>
+      <p><label>
+          Delete older than:
+          <input type="text" value="1h" name="keep_within" pattern="(\d+\w)+" size="8">
+          (<a href="https://pkg.go.dev/time#ParseDuration">time.ParseDuration</a>)
+      </label></p>
+      <p><input type="submit" value="Prune snapshots"></p>
+    </fieldset>
+  </form>
+
+  <h2>Recent downloads</h2>
+
+  <p>Reload the page to refresh.</p>
+
+  <table border="1" id="downloads">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Snapshot name</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{range .Downloads}}
+      <tr>
+        <td><a href="./api/download_status?id={{ .ID }}">{{ .ID }}</a></td>
+        <td>{{ .Name }}</td>
+      </tr>
+    {{else}}
+      <tr><td colspan="2"><em>(none)</em></td></tr>
+    {{end}}
+    </tbody>
+  </table>
+</body>
+</html>
+{{- /* vim: set sw=2 sts=2 et : */ -}}

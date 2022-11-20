@@ -1,0 +1,57 @@
+# Configuration for GoReleaser
+# https://goreleaser.com/
+
+project_name: prombackup
+
+env:
+  - CGO_ENABLED=0
+
+builds:
+  - id: prombackup
+    main: ./cmd/prombackup/
+    binary: prombackup
+    targets:
+      - go_first_class
+    flags:
+      - -trimpath
+
+  - id: prombackup-server
+    main: ./cmd/prombackup-server/
+    binary: prombackup-server
+    targets:
+      - go_first_class
+    flags:
+      - -trimpath
+
+nfpms:
+  - description: Prometheus backup
+    maintainer: M. Hanselmann
+    bindir: /usr/bin
+    license: BSD-3-Clause
+    formats:
+      - deb
+      - rpm
+    contents:
+      - src: ./README.md
+        dst: /usr/share/doc/prombackup/README.md
+      - src: ./LICENSE
+        dst: /usr/share/doc/prombackup/LICENSE
+
+archives:
+  - format: tar.gz
+    wrap_in_directory: true
+    files:
+      - LICENSE
+      - README.md
+    format_overrides:
+      - goos: windows
+        format: zip
+
+release:
+  draft: true
+  prerelease: auto
+
+snapshot:
+  name_template: '{{ incpatch .Version }}-snapshot{{ replace (replace .Date ":" "") "-" "" }}+g{{ .ShortCommit }}'
+
+# vim: set sw=2 sts=2 et :
