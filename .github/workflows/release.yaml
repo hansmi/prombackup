@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
   release:
@@ -32,12 +33,24 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           REF: ${{ github.ref }}
         run: |
+          goreleaser_args=( --skip-publish )
+          docker_login=
+
           if [[ "$EVENT_NAME" = push && "$REF" = refs/tags/v[0-9]*.* ]]; then
-            args=()
-          else
-            args=( --skip-publish )
+            goreleaser_args=()
+            docker_login=true
           fi
-          echo "goreleaser_args=${args[*]}" >> $GITHUB_OUTPUT
+
+          echo "goreleaser_args=${goreleaser_args[*]}" >> $GITHUB_OUTPUT
+          echo "docker_login=${docker_login}" >> $GITHUB_OUTPUT
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        if: steps.vars.outputs.docker_login
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v3

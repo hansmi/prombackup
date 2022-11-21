@@ -51,6 +51,45 @@ archives:
       - goos: windows
         format: zip
 
+dockers:
+  - ids:
+      - prombackup
+    use: buildx
+    dockerfile: &docker_dockerfile contrib/Dockerfile.goreleaser
+    extra_files: &docker_extra_files
+      - LICENSE
+      - README.md
+    image_templates:
+      - ghcr.io/hansmi/prombackup:{{.Tag}}
+      - ghcr.io/hansmi/prombackup:v{{.Major}}
+      - ghcr.io/hansmi/prombackup:latest
+    build_flag_templates:
+      - --pull
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.name={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.source={{.GitURL}}
+      - --target=prombackup
+
+  - ids:
+      - prombackup-server
+    use: buildx
+    dockerfile: *docker_dockerfile
+    extra_files: *docker_extra_files
+    image_templates:
+      - ghcr.io/hansmi/prombackup-server:{{.Tag}}
+      - ghcr.io/hansmi/prombackup-server:v{{.Major}}
+      - ghcr.io/hansmi/prombackup-server:latest
+    build_flag_templates:
+      - --pull
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.name={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.source={{.GitURL}}
+      - --target=prombackup-server
+
 release:
   draft: true
   prerelease: auto

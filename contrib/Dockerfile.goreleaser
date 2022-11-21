@@ -1,0 +1,19 @@
+FROM docker.io/library/alpine:latest AS alpine
+RUN apk add --no-cache ca-certificates
+
+FROM scratch AS base
+LABEL iorg.opencontainers.image.licenses=BSD-3-Clause
+LABEL org.opencontainers.image.description="Backup CLI for Prometheus"
+WORKDIR /
+COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY LICENSE README.md /
+
+FROM base AS prombackup-server
+COPY prombackup-server /prombackup-server
+ENTRYPOINT ["/prombackup-server"]
+
+FROM base AS prombackup
+COPY prombackup /prombackup
+ENTRYPOINT ["/prombackup"]
+
+# vim: set ft=dockerfile :
