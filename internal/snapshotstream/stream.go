@@ -133,11 +133,12 @@ func (s *Stream) WriteTo(w io.Writer) error {
 	err := s.writeTo(io.MultiWriter(w, digestw))
 
 	sf := api.DownloadStatusFinished{
-		Success:   (err == nil),
-		Sha256Hex: hex.EncodeToString(digestw.Sum(nil)),
+		Success: (err == nil),
 	}
 
-	if err != nil {
+	if err == nil {
+		sf.Sha256Hex = hex.EncodeToString(digestw.Sum(nil))
+	} else {
 		msg := err.Error()
 		sf.ErrorText = &msg
 	}
