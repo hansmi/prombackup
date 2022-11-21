@@ -1,7 +1,6 @@
 package snapshotstream
 
 import (
-	"bufio"
 	"compress/gzip"
 	"crypto/sha256"
 	"encoding/hex"
@@ -93,21 +92,15 @@ func (s *Stream) Status() api.DownloadStatus {
 }
 
 func (s *Stream) writeTo(w io.Writer) (err error) {
-	bufWriter := bufio.NewWriterSize(w, 1024*1024)
-
-	defer func() {
-		multierr.AppendInto(&err, bufWriter.Flush())
-	}()
-
 	var archiveWriter io.Writer
 	var compressionFlush func() error
 
 	switch s.format {
 	case api.ArchiveTar:
-		archiveWriter = bufWriter
+		archiveWriter = w
 
 	case api.ArchiveTarGzip:
-		gzipWriter := gzip.NewWriter(bufWriter)
+		gzipWriter := gzip.NewWriter(w)
 		gzipWriter.Header.Name = strings.TrimSuffix(filepath.Base(s.Filename), filepath.Ext(s.Filename))
 		gzipWriter.Header.Comment = fmt.Sprintf("Prometheus snapshot %s", s.name)
 
