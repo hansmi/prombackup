@@ -10,18 +10,16 @@ builds:
   - id: prombackup
     main: ./cmd/prombackup/
     binary: prombackup
-    targets:
+    targets: &build_targets
       - go_first_class
-    flags:
+    flags: &build_flags
       - -trimpath
 
   - id: prombackup-server
     main: ./cmd/prombackup-server/
     binary: prombackup-server
-    targets:
-      - go_first_class
-    flags:
-      - -trimpath
+    targets: *build_targets
+    flags: *build_flags
     ldflags: |
       -s -w
       -X github.com/prometheus/common/version.Version={{.Version}}
