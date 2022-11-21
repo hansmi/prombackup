@@ -78,6 +78,13 @@ Pre-built binaries are provided for [all releases][releases]:
 * Debian/Ubuntu (`.deb`)
 * RHEL/Fedora (`.rpm`)
 
+Docker images via GitHub's container registry:
+
+```shell
+docker pull ghcr.io/hansmi/prombackup
+docker pull ghcr.io/hansmi/prombackup-server
+```
+
 With the source being available it's also possible to produce custom builds
 directly using [Go](https://go.dev/) or [GoReleaser](https://goreleaser.com/).
 
