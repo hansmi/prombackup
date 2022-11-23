@@ -7,6 +7,7 @@ require (
 	github.com/google/subcommands v1.2.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
+	github.com/klauspost/compress v1.15.12
 	github.com/prometheus/client_golang v1.14.0
 	github.com/prometheus/common v0.37.0
 	go.uber.org/multierr v1.8.0

@@ -1,7 +1,6 @@
 package snapshotstream
 
 import (
-	"compress/gzip"
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
@@ -12,8 +11,10 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/hansmi/prombackup/api"
+	"github.com/klauspost/compress/gzip"
 	"go.uber.org/multierr"
 )
 
