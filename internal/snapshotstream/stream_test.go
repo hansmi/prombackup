@@ -154,7 +154,7 @@ func TestStream(t *testing.T) {
 					t.Errorf("gzip.NewReader() failed: %v", err)
 				}
 
-				if diff := cmp.Diff(tc.wantGzipHeader, gzReader.Header, cmpopts.IgnoreFields(gzip.Header{}, "OS")); diff != "" {
+				if diff := cmp.Diff(tc.wantGzipHeader, gzReader.Header, cmpopts.IgnoreFields(gzip.Header{}, "OS", "ModTime")); diff != "" {
 					t.Errorf("Gzip header diff (-want +got):\n%s", diff)
 				}
 

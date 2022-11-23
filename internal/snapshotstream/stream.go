@@ -103,6 +103,7 @@ func (s *Stream) writeTo(w io.Writer) (err error) {
 		gzipWriter := gzip.NewWriter(w)
 		gzipWriter.Header.Name = strings.TrimSuffix(filepath.Base(s.Filename), filepath.Ext(s.Filename))
 		gzipWriter.Header.Comment = fmt.Sprintf("Prometheus snapshot %s", s.name)
+		gzipWriter.Header.ModTime = time.Now()
 
 		defer multierr.AppendInvoke(&err, multierr.Close(gzipWriter))
 
