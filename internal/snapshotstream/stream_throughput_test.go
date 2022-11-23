@@ -3,48 +3,66 @@ package snapshotstream
 import (
 	"bytes"
 	"crypto/rand"
+	"fmt"
+	"io/fs"
 	"testing"
 	"testing/fstest"
 
 	"github.com/hansmi/prombackup/api"
 )
 
-func BenchmarkStreamWriteTo(b *testing.B) {
-	const fileSize = 128 * 1024 * 1024
+const MiB = 1024 * 1024
 
+func makeFilesystem(b *testing.B, fileSize int) fs.FS {
 	fileData := make([]byte, fileSize)
 
 	if _, err := rand.Read(fileData); err != nil {
 		b.Fatalf("Read() failed: %v", err)
 	}
 
-	root := fstest.MapFS{
+	return &fstest.MapFS{
 		"file": {
 			Data: fileData,
 		},
 	}
+}
 
-	s, err := New(Options{
-		Name:   "stream",
-		Root:   root,
-		Format: api.ArchiveTar,
-	})
-	if err != nil {
-		b.Fatalf("New() failed: %v", err)
-	}
+func BenchmarkStreamWriteTo(b *testing.B) {
+	var output bytes.Buffer
 
-	var buf bytes.Buffer
+	output.Grow((128 + 16) * MiB)
 
-	buf.Grow(fileSize)
+	for _, format := range api.ArchiveFormatAll {
+		b.Run(format.Name(), func(b *testing.B) {
+			for _, fileSize := range []int{
+				1 * MiB,
+				8 * MiB,
+				16 * MiB,
+				128 * MiB,
+			} {
+				b.Run(fmt.Sprintf("%.1fMiB", float32(fileSize)/MiB), func(b *testing.B) {
+					s, err := New(Options{
+						Name:   "stream",
+						Root:   makeFilesystem(b, fileSize),
+						Format: format,
+					})
+					if err != nil {
+						b.Fatalf("New() failed: %v", err)
+					}
 
-	b.SetBytes(fileSize)
-	b.ResetTimer()
+					output.Grow(fileSize)
+					b.SetBytes(int64(fileSize))
+					b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
-		if err := s.WriteTo(&buf); err != nil {
-			b.Errorf("WriteTo() failed: %v", err)
-		}
+					for i := 0; i < b.N; i++ {
+						if err := s.WriteTo(&output); err != nil {
+							b.Errorf("WriteTo() failed: %v", err)
+						}
 
-		buf.Reset()
+						output.Reset()
+					}
+				})
+			}
+		})
 	}
 }
