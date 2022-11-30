@@ -1,7 +1,6 @@
 package snapshotstream
 
 import (
-	"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -15,6 +14,7 @@ import (
 
 	"github.com/hansmi/prombackup/api"
 	"github.com/klauspost/compress/gzip"
+	"github.com/minio/sha256-simd"
 	"go.uber.org/multierr"
 )
 
