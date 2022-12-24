@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"path/filepath"
 
 	"go.uber.org/multierr"
 )
@@ -44,7 +45,7 @@ func (a *tarArchiver) FileErrors() error {
 // Directories and regular files are the only supported types.
 func (a *tarArchiver) Append(name string, d fs.DirEntry, open openFunc) (err error) {
 	hdr := tar.Header{
-		Name: name,
+		Name: filepath.ToSlash(filepath.Clean(name)),
 	}
 
 	if d.IsDir() {
