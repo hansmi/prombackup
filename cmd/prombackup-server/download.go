@@ -73,7 +73,7 @@ func (m *manager) handleDownload(w http.ResponseWriter, r *http.Request) {
 	}))
 	header.Set(api.HttpHeaderDownloadID, id)
 
-	if err := s.WriteTo(w); err != nil {
+	if err := s.WriteArchive(w); err != nil {
 		m.logger.Printf("Download %s failed: %v", id, err)
 	} else {
 		m.logger.Printf("Download %s finished: %+v", id, s.Status().Finished)

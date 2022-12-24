@@ -27,7 +27,7 @@ func makeFilesystem(b *testing.B, fileSize int) fs.FS {
 	}
 }
 
-func BenchmarkStreamWriteTo(b *testing.B) {
+func BenchmarkStreamWriteArchive(b *testing.B) {
 	var output bytes.Buffer
 
 	output.Grow((128 + 16) * MiB)
@@ -55,8 +55,8 @@ func BenchmarkStreamWriteTo(b *testing.B) {
 					b.ResetTimer()
 
 					for i := 0; i < b.N; i++ {
-						if err := s.WriteTo(&output); err != nil {
-							b.Errorf("WriteTo() failed: %v", err)
+						if err := s.WriteArchive(&output); err != nil {
+							b.Errorf("WriteArchive() failed: %v", err)
 						}
 
 						output.Reset()

@@ -136,7 +136,7 @@ func TestStream(t *testing.T) {
 
 			var buf bytes.Buffer
 
-			err = s.WriteTo(&buf)
+			err = s.WriteArchive(&buf)
 
 			if diff := cmp.Diff(tc.wantErr, err, cmpopts.EquateErrors()); diff != "" {
 				t.Errorf("Error diff (-want +got):\n%s", diff)

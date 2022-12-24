@@ -92,7 +92,7 @@ func (s *Stream) Status() api.DownloadStatus {
 	return s.status
 }
 
-func (s *Stream) writeTo(w io.Writer) (err error) {
+func (s *Stream) writeArchive(w io.Writer) (err error) {
 	var archiveWriter io.Writer
 	var compressionFlush func() error
 
@@ -122,10 +122,10 @@ func (s *Stream) writeTo(w io.Writer) (err error) {
 	return archiveDir(s.root, s.name, a)
 }
 
-func (s *Stream) WriteTo(w io.Writer) error {
+func (s *Stream) WriteArchive(w io.Writer) error {
 	digestw := sha256.New()
 
-	err := s.writeTo(io.MultiWriter(w, digestw))
+	err := s.writeArchive(io.MultiWriter(w, digestw))
 
 	sf := api.DownloadStatusFinished{
 		Success: (err == nil),
