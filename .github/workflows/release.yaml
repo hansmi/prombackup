@@ -9,7 +9,7 @@ permissions: {}
 
 jobs:
   release:
-    uses: hansmi/ghactions-goreleaser-workflow/.github/workflows/release.yaml@v2
+    uses: hansmi/ghactions-goreleaser-workflow/.github/workflows/release.yaml@stable
     permissions:
       contents: write
       packages: write
