@@ -77,6 +77,7 @@ Pre-built binaries are provided for [all releases][releases]:
 * Binary archives (`.tar.gz`)
 * Debian/Ubuntu (`.deb`)
 * RHEL/Fedora (`.rpm`)
+* Microsoft Windows (`*.zip`)
 
 Docker images via GitHub's container registry:
 
