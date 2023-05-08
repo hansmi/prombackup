@@ -9,7 +9,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/klauspost/compress v1.16.5
 	github.com/minio/sha256-simd v1.0.0
-	github.com/prometheus/client_golang v1.15.0
+	github.com/prometheus/client_golang v1.15.1
 	github.com/prometheus/common v0.42.0
 	go.uber.org/multierr v1.11.0
 )
