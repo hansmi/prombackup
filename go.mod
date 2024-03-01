@@ -9,8 +9,8 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/klauspost/compress v1.17.7
 	github.com/minio/sha256-simd v1.0.1
-	github.com/prometheus/client_golang v1.18.0
-	github.com/prometheus/common v0.46.0
+	github.com/prometheus/client_golang v1.19.0
+	github.com/prometheus/common v0.48.0
 	go.uber.org/multierr v1.11.0
 )
 
