@@ -7,7 +7,7 @@ require (
 	github.com/google/subcommands v1.2.0
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
-	github.com/klauspost/compress v1.17.5
+	github.com/klauspost/compress v1.17.7
 	github.com/minio/sha256-simd v1.0.1
 	github.com/prometheus/client_golang v1.18.0
 	github.com/prometheus/common v0.46.0
