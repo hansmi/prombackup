@@ -12,7 +12,7 @@ require (
 	github.com/klauspost/compress v1.17.7
 	github.com/minio/sha256-simd v1.0.1
 	github.com/prometheus/client_golang v1.19.0
-	github.com/prometheus/common v0.49.0
+	github.com/prometheus/common v0.51.1
 	go.uber.org/multierr v1.11.0
 )
 
@@ -26,6 +26,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/prometheus/client_model v0.6.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
-	golang.org/x/sys v0.17.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 )

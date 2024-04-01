@@ -15,7 +15,8 @@ import (
 	"github.com/prometheus/client_golang/api"
 	promv1 "github.com/prometheus/client_golang/api/prometheus/v1"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/version"
+	"github.com/prometheus/client_golang/prometheus/collectors/version"
+	commonversion "github.com/prometheus/common/version"
 )
 
 func listenAndServe(addr string, handler http.Handler) error {
@@ -51,7 +52,7 @@ func main() {
 	flag.Parse()
 
 	if *showVersion {
-		fmt.Println(version.Print("prombackup-server"))
+		fmt.Println(commonversion.Print("prombackup-server"))
 		return
 	}
 
