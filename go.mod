@@ -2,8 +2,6 @@ module github.com/hansmi/prombackup
 
 go 1.22
 
-toolchain go1.22.11
-
 require (
 	github.com/google/go-cmp v0.7.0
 	github.com/google/subcommands v1.2.0
@@ -11,7 +9,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/klauspost/compress v1.18.0
 	github.com/minio/sha256-simd v1.0.1
-	github.com/prometheus/client_golang v1.21.0
+	github.com/prometheus/client_golang v1.21.1
 	github.com/prometheus/common v0.62.0
 	go.uber.org/multierr v1.11.0
 )
