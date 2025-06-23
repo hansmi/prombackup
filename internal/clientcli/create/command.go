@@ -2,7 +2,6 @@ package create
 
 import (
 	"context"
-	"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"flag"
@@ -13,6 +12,7 @@ import (
 	"github.com/google/subcommands"
 	"github.com/hansmi/prombackup/api"
 	"github.com/hansmi/prombackup/internal/clientcli"
+	"github.com/minio/sha256-simd"
 	"go.uber.org/multierr"
 )
 
