@@ -73,6 +73,9 @@ func (c *Command) execute(ctx context.Context, cl ClientInterface) (err error) {
 		Format:       api.ArchiveFormat(c.format),
 		BodyWriter: func(result api.DownloadResult) (io.Writer, error) {
 			w, err := output.Open(result.Filename)
+			if err != nil {
+				return nil, fmt.Errorf("opening output: %w", err)
+			}
 
 			if namer, ok := w.(interface{ Name() string }); ok && err == nil {
 				log.Printf("Writing snapshot archive to %s", namer.Name())
