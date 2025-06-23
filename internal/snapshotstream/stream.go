@@ -14,6 +14,7 @@ import (
 
 	"github.com/hansmi/prombackup/api"
 	"github.com/klauspost/compress/gzip"
+	"github.com/klauspost/compress/zstd"
 	"github.com/minio/sha256-simd"
 	"go.uber.org/multierr"
 )
@@ -54,7 +55,7 @@ func New(opts Options) (*Stream, error) {
 	}
 
 	switch f := opts.Format; f {
-	case api.ArchiveTar, api.ArchiveTarGzip:
+	case api.ArchiveTar, api.ArchiveTarGzip, api.ArchiveTarZstd:
 		s.ContentType = f.ContentType()
 		s.Filename = filepath.Base(s.name) + f.FileExtension()
 	default:
@@ -110,6 +111,19 @@ func (s *Stream) writeArchive(w io.Writer) (err error) {
 
 		archiveWriter = gzipWriter
 		compressionFlush = gzipWriter.Flush
+
+	case api.ArchiveTarZstd:
+		zstdWriter, err := zstd.NewWriter(w,
+			zstd.WithEncoderCRC(true),
+		)
+		if err != nil {
+			return err
+		}
+
+		defer multierr.AppendInvoke(&err, multierr.Close(zstdWriter))
+
+		archiveWriter = zstdWriter
+		compressionFlush = zstdWriter.Flush
 
 	default:
 		return ErrArchiveFormat

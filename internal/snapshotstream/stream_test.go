@@ -11,6 +11,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/hansmi/prombackup/api"
+	"github.com/klauspost/compress/zstd"
 )
 
 func TestStream(t *testing.T) {
@@ -104,6 +105,30 @@ func TestStream(t *testing.T) {
 				{name: "archive93c2/file", content: "hello world"},
 			},
 		},
+		{
+			name: "tar+zstd",
+			opts: Options{
+				Name: "archive51b2fb",
+				Root: &fstest.MapFS{
+					"file": {
+						Data: []byte("hello world"),
+					},
+				},
+				Format: api.ArchiveTarZstd,
+			},
+			wantContentType: "application/zstd",
+			wantFilename:    "archive51b2fb.tar.zst",
+			wantStatusAfter: api.DownloadStatus{
+				SnapshotName: "archive51b2fb",
+				Finished: &api.DownloadStatusFinished{
+					Success: true,
+				},
+			},
+			want: []tarEntry{
+				{name: "archive51b2fb"},
+				{name: "archive51b2fb/file", content: "hello world"},
+			},
+		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			s, err := New(tc.opts)
@@ -148,7 +173,9 @@ func TestStream(t *testing.T) {
 
 			var tarReader io.Reader = &buf
 
-			if tc.opts.Format == api.ArchiveTarGzip {
+			switch tc.opts.Format {
+			case api.ArchiveTar:
+			case api.ArchiveTarGzip:
 				gzReader, err := gzip.NewReader(tarReader)
 				if err != nil {
 					t.Errorf("gzip.NewReader() failed: %v", err)
@@ -159,6 +186,17 @@ func TestStream(t *testing.T) {
 				}
 
 				tarReader = gzReader
+
+			case api.ArchiveTarZstd:
+				zstdReader, err := zstd.NewReader(tarReader)
+				if err != nil {
+					t.Errorf("zstd.NewReader() failed: %v", err)
+				}
+
+				tarReader = zstdReader
+
+			default:
+				t.Errorf("Unhandled format %q", tc.opts.Format)
 			}
 
 			checkTarContents(t, tarReader, tc.want)
