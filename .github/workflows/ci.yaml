@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         runs-on: ["ubuntu-latest", "windows-latest"]
-    uses: hansmi/ghactions-go-test-workflow/.github/workflows/test.yaml@v0.2
+    uses: hansmi/ghactions-go-test-workflow/.github/workflows/test.yaml@0.3
     with:
       runs-on: ${{ matrix.runs-on }}
 
