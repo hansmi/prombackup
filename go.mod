@@ -10,7 +10,7 @@ require (
 	github.com/klauspost/compress v1.18.1
 	github.com/minio/sha256-simd v1.0.1
 	github.com/prometheus/client_golang v1.23.2
-	github.com/prometheus/common v0.67.2
+	github.com/prometheus/common v0.67.4
 	go.uber.org/multierr v1.11.0
 )
 
